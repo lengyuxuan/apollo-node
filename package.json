@@ -1,0 +1,21 @@
+{
+  "name": "@fangjinlyx/apollo-node",
+  "version": "0.0.9",
+  "description": "",
+  "main": "out/app.js",
+  "scripts": {
+    "p": "tsc -p . && npm publish --access public"
+  },
+  "author": "fangjin",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^13.13.5"
+  },
+  "dependencies": {
+    "ctrip-apollo": "^4.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitee.com:lyxfj/apollo-node.git"
+  }
+}

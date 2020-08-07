@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es2017",
+		"outDir": "out",
+		"experimentalDecorators": true,
+		"lib": [
+			"es2017"
+		],
+		"declaration": true,
+		"sourceMap": true
+	},
+	"exclude": [
+		"node_modules"
+	],
+	"include": [
+		"src/**/*", "index.d.ts"
+	],
+}
