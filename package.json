@@ -1,18 +1,20 @@
 {
   "name": "@fangjinlyx/apollo-node",
-  "version": "0.0.9",
+  "version": "0.0.1",
   "description": "",
-  "main": "out/app.js",
+  "main": "out/client.js",
   "scripts": {
     "p": "tsc -p . && npm publish --access public"
   },
   "author": "fangjin",
   "license": "ISC",
   "devDependencies": {
+    "@types/ip": "^1.1.0",
     "@types/node": "^13.13.5"
   },
   "dependencies": {
-    "ctrip-apollo": "^4.4.3"
+    "got": "^11.5.2",
+    "ip": "^1.1.5"
   },
   "repository": {
     "type": "git",

@@ -27,6 +27,34 @@
       ],
       "outputCapture": "std",
       "preLaunchTask": "tsc: 监视 - tsconfig.json"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "client",
+      "program": "${workspaceFolder}/out/client.js",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**",
+      ],
+      "outputCapture": "std",
+      "preLaunchTask": "tsc: 监视 - tsconfig.json"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "sync-config",
+      "program": "${workspaceFolder}/out/sync.js",
+      "skipFiles": [
+        "<node_internals>/**",
+        "${workspaceFolder}/node_modules/**",
+      ],
+      "outputCapture": "std",
+      "preLaunchTask": "tsc: 监视 - tsconfig.json",
+      "env": {
+        "URL": "http://127.0.0.1:8080/configs/23424/nuc",
+        "NAMESPACE": "application,TEST2.mongo"
+      }
     }
   ]
 }
