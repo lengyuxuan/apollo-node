@@ -2,7 +2,7 @@ import got from 'got';
 import { debuglog } from 'util';
 import { spawnSync } from 'child_process';
 import { address } from 'ip';
-import * as crypto from 'crypto';
+import { getHeader } from './signature';
 
 const debug = debuglog('APOLLO_CLIENT');
 export class ApolloClient {
@@ -29,9 +29,9 @@ export class ApolloClient {
     const url = `${this.host}/configs/${this.appId}/${this.cluster}`;
     const result = spawnSync('node', ['sync.js'], {
       env: {
-        URL: url,
+        URL_PREFIX: url,
         NAMESPACE: this.namespace.join(','),
-        HEADER: JSON.stringify(this.getHeader(url)),
+        SECRET: this.secret,
       },
       cwd: __dirname,
     });
@@ -52,7 +52,7 @@ export class ApolloClient {
     while (true) {
       try {
         const url = `${this.host}/notifications/v2?appId=${this.appId}&cluster=${this.cluster}&notifications=${encodeURI(JSON.stringify(notifications))}`
-        const res = await got.get<Notification[]>(url, { timeout: 61 * 1000, responseType: 'json', headers: this.getHeader(url) });
+        const res = await got.get<Notification[]>(url, { timeout: 61 * 1000, responseType: 'json', headers: getHeader(url, this.secret) });
         const noteList = res.body;
         if (res.statusCode === 304) {
           debug('no change');
@@ -76,7 +76,7 @@ export class ApolloClient {
   private async updateConfig(namespaceName: string) {
     try {
       const url = `${this.host}/configs/${this.appId}/${this.cluster}/${namespaceName}?releaseKey=${this.releaseKey}&ip=${this.ip}`;
-      const res = await got.get<ConfigResult>(url, { responseType: 'json', headers: this.getHeader(url) });
+      const res = await got.get<ConfigResult>(url, { responseType: 'json', headers: getHeader(url, this.secret) });
       if (res.statusCode === 304) {
         debug('releaseKey is same!');
         return;
@@ -100,17 +100,5 @@ export class ApolloClient {
     } catch (error) {
       console.log('get config error', error);
     }
-  }
-
-  private getHeader(url) {
-    const timestamp = Date.now().toString();
-    return this.secret ? { Timestamp: timestamp, Authorization: `Apollo ${ this.appId }:${ this.signature(url, timestamp) }` } : {};
-  }
-
-  private signature(url, timestamp) {
-    const str = `${ timestamp }\n${ url }`;
-    const hash = crypto.createHmac('sha1', this.secret);
-    const sign = hash.update(str, 'utf8').digest('hex');
-    return Buffer.from(sign).toString('base64');
   }
 }

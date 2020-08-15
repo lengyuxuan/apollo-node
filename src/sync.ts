@@ -1,13 +1,18 @@
 import got from 'got';
+import { getHeader } from './signature';
 
-const url = process.env.URL;
+const urlPrefix = process.env.URL_PREFIX;
 const list = process.env.NAMESPACE.split(',');
-const headers = JSON.parse(process.env.HEADER);
+const secret = process.env.SECRET;
 
 (async () => {
   const config = {};
   for (const name of list) {
-    const res = await got.get<ConfigResult>(url + '/' + name, { responseType: 'json', headers });
+    const url = `${ urlPrefix }/${ name }`;
+    const res = await got.get<ConfigResult>(url, {
+      responseType: 'json',
+      headers: getHeader(url, secret),
+    });
     if (name === 'application') {
       Object.assign(config, res.body.configurations);
     } else {

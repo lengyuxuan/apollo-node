@@ -52,8 +52,9 @@
       "outputCapture": "std",
       "preLaunchTask": "tsc: 监视 - tsconfig.json",
       "env": {
-        "URL": "http://127.0.0.1:8080/configs/23424/nuc",
-        "NAMESPACE": "application,TEST2.mongo"
+        "URL_PREFIX": "http://192.168.124.8:8080/configs/mind-server/nuc",
+        "NAMESPACE": "application",
+        "SECRET": "18b079a14e9c43ca83374f614da793b4"
       }
     }
   ]
