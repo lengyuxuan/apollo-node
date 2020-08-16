@@ -1,4 +1,4 @@
-interface Option {
+export interface Option {
   /** 默认值 http://127.0.0.1:8080 */
   host?: string;
   appId: string;
@@ -14,7 +14,7 @@ interface Option {
   sync?: boolean;
 }
 
-interface Notification {
+export interface Notification {
   namespaceName: string;
   notificationId: number;
   messages: {
@@ -22,7 +22,7 @@ interface Notification {
   }
 }
 
-interface ConfigResult<T> {
+export interface ConfigResult<T> {
   appId: string;
   cluster: string;
   namespaceName: string;
@@ -30,8 +30,8 @@ interface ConfigResult<T> {
   releaseKey: string;
 }
 
-type SelfConstructor = <T>(value: string) => T;
+export type SelfConstructor = <T>(value: string) => T;
 
-interface ConfigConstructor {
+export interface ConfigConstructor {
   [key: string]: SelfConstructor | ConfigConstructor;
 }

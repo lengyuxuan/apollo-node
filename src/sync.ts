@@ -1,9 +1,9 @@
-import got from 'got';
-import { getHeader } from './signature';
-
 /**
  * 本文件将以spawnSync的形式被执行，目的是同步获取一次完整的配置文件
  */
+import got from 'got';
+import { getHeader } from './signature';
+import { ConfigResult } from './typing';
 
 const urlPrefix = process.env.URL_PREFIX;
 const list = process.env.NAMESPACE.split(',');

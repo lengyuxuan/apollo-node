@@ -4,6 +4,7 @@ import { spawnSync } from 'child_process';
 import { address } from 'ip';
 import { getHeader } from './signature';
 import { EventEmitter } from 'events';
+import { ConfigConstructor, Option, Notification, ConfigResult } from './typing';
 
 const debug = debuglog('APOLLO_CLIENT');
 export class ApolloClient<T> {

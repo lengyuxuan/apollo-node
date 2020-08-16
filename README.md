@@ -2,11 +2,11 @@
 
 #### 更新日志
 
-##### v0.0.4
-bug修复: index.d.ts未打包
-
-##### v0.0.3
-###### 新增配置类型泛形
+##### v0.0.7
+###### 支持秘钥
+###### 支持同步获取配置数据，防止await/async污染
+###### 支持实时推送
+###### 配置类型泛形
 ```typescript
 interface Config {
   key1: string;
@@ -23,7 +23,7 @@ const client = new ApolloClient<Config>({
 // client.config的类型为Config
 ```
 
-###### 新增类型转换
+###### 配置类型格式化
 由于Apollo获取到的参数值只能是string类型，使用时还需要二次解析，新版本内置了类型转换：
 ```typescript
 interface Config {
@@ -66,7 +66,7 @@ console.log(client.config);
 // }
 ```
 
-###### 新增异步回调获取方式
+###### 异步回调获取方式
 ```typescript
 const client = new ApolloClient<Config>({
   appId: 'mind-server',
@@ -87,7 +87,7 @@ const client = new ApolloClient<Config>({
 ```
 > 当设置sync为true的时候必须传入callback回调
 
-###### 新增配置更新回调
+###### 配置更新回调
 ```typescript
 const client = new ApolloClient<Config>({
   appId: 'mind-server',
@@ -126,13 +126,6 @@ client.changeEvent.on('mongodb.url', (notify) => {
 });
 ```
 
-##### v0.0.2
-支持秘钥
-
-##### v0.0.1
-支持同步获取配置数据，防止await/async污染
-支持实时推送
-
 #### 使用方式
 ```typescript
 import { ApolloClient } from './client';
@@ -152,14 +145,13 @@ interface Config {
 }
 
 const client = new ApolloClient<Config>({
-  appId: 'mind-server',
+  appId: 'lock-server',
   cluster: 'nuc',
   namespace: [
     'nuc.mongodb',
-    'tx.redis',
   ],
-  host: 'http://192.168.124.8:8080',
-  secret: '18b079a14e9c43ca83374f614da793b4',
+  host: 'http://192.168.8.8:8080',
+  secret: 'b27a01fea3bd4f23a83e3261be146036',
   configConstructor: {
     key1: String,
     key2: Number,
@@ -173,9 +165,21 @@ const client = new ApolloClient<Config>({
       password: String,
     },
   },
+  sync: true,
 });
 
-setInterval(() => {
-  console.log(client.config);
-}, 1000);
+console.log(client.config);
+
+client.changeEvent.on('redis.port', (notify) => {
+  console.log(notify);
+});
+
+client.changeEvent.on('key1', (notify) => {
+  console.log(notify);
+});
+
+client.changeEvent.on('mongodb.url', (notify) => {
+  console.log(notify);
+});
+
 ```

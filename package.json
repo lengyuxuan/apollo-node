@@ -1,6 +1,6 @@
 {
   "name": "@fangjinlyx/apollo-node",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "description": "",
   "main": "out/client.js",
   "scripts": {
