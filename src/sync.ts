@@ -1,6 +1,10 @@
 import got from 'got';
 import { getHeader } from './signature';
 
+/**
+ * 本文件将以spawnSync的形式被执行，目的是同步获取一次完整的配置文件
+ */
+
 const urlPrefix = process.env.URL_PREFIX;
 const list = process.env.NAMESPACE.split(',');
 const secret = process.env.SECRET;
@@ -9,7 +13,7 @@ const secret = process.env.SECRET;
   const config = {};
   for (const name of list) {
     const url = `${ urlPrefix }/${ name }`;
-    const res = await got.get<ConfigResult>(url, {
+    const res = await got.get<ConfigResult<{[key: string]: string}>>(url, {
       responseType: 'json',
       headers: getHeader(url, secret),
     });

@@ -1,4 +1,4 @@
-interface ApolloConfig {
+interface Option {
   /** 默认值 http://127.0.0.1:8080 */
   host?: string;
   appId: string;
@@ -8,6 +8,10 @@ interface ApolloConfig {
   namespace: string[];
   /** 密钥 */
   secret?: string;
+  /** 构造器 */
+  configConstructor?: any;
+  /** 是否开启同步获取配置 */
+  sync?: boolean;
 }
 
 interface Notification {
@@ -18,10 +22,16 @@ interface Notification {
   }
 }
 
-interface ConfigResult {
+interface ConfigResult<T> {
   appId: string;
   cluster: string;
   namespaceName: string;
-  configurations: { [key: string]: string };
+  configurations: T;
   releaseKey: string;
+}
+
+type SelfConstructor = <T>(value: string) => T;
+
+interface ConfigConstructor {
+  [key: string]: SelfConstructor | ConfigConstructor;
 }
