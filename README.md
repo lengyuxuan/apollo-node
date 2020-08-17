@@ -2,6 +2,28 @@
 
 #### 更新日志
 
+##### v0.0.8
+###### 新增监听namespa变动
+
+```typescript
+interface Config {
+  key1: string;
+  key2: number;
+}
+const client = new ApolloClient<Config>({
+  appId: 'mind-server',
+  cluster: 'nuc',
+  namespace: [
+    'nuc.mongodb',
+    'tx.redis',
+  ],
+});
+
+client.changeEvent.on('key1', (notify) => {
+  console.log(notify);
+});
+```
+
 ##### v0.0.7
 ###### 支持秘钥
 ###### 支持同步获取配置数据，防止await/async污染

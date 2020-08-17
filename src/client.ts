@@ -6,6 +6,21 @@ import { getHeader } from './signature';
 import { EventEmitter } from 'events';
 import { ConfigConstructor, Option, Notification, ConfigResult } from './typing';
 
+interface ChangeEvent extends EventEmitter {
+  on(event: string, listener: (notify: {
+    namespaceName: string;
+    newValue: any;
+    oldValue: any;
+  }) => void): this;
+}
+
+interface NamespaceChangeEvent extends EventEmitter {
+  on(namespaceName: string, listener: (notify: {
+    namespaceName: string;
+    changeList: { newValue: any, oldValue: any }[];
+  }) => void): this;
+}
+
 const debug = debuglog('APOLLO_CLIENT');
 export class ApolloClient<T> {
   // 配置
@@ -13,7 +28,9 @@ export class ApolloClient<T> {
   // 本机ip，灰度发布使用
   public ip = address();
   // 配置更新事件
-  public changeEvent = new EventEmitter();
+  public changeEvent: ChangeEvent = new EventEmitter();
+  // namespace更新事件
+  public namespaceChangeEvent: NamespaceChangeEvent = new EventEmitter();
   // apollo地址
   private host: string = 'http://127.0.0.1:8080';
   // 应用id
@@ -170,6 +187,7 @@ export class ApolloClient<T> {
   }
 
   private diff(config: T, newConfig: T, namespaceName: string) {
+    const changeList: { newValue: any, oldValue: any }[] = [];
     for (const [key, newValue] of Object.entries(newConfig)) {
       const oldValue = config[key];
       if (oldValue !== undefined && oldValue !== newValue) {
@@ -179,7 +197,14 @@ export class ApolloClient<T> {
           newValue,
           namespaceName,
         });
+        changeList.push({ oldValue, newValue });
       }
+    }
+    if (changeList.length > 0) {
+      this.namespaceChangeEvent.emit(namespaceName.replace(/^.+?\./, ''), {
+        namespaceName,
+        changeList,
+      });
     }
   }
 }
