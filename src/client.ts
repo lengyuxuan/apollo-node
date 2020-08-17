@@ -75,7 +75,7 @@ export class ApolloClient<T> {
     while (true) {
       try {
         const url = `${this.host}/notifications/v2?appId=${this.appId}&cluster=${this.cluster}&notifications=${encodeURI(JSON.stringify(notifications))}`
-        const res = await got.get<Notification[]>(url, { timeout: 61 * 1000, responseType: 'json', headers: getHeader(url, this.secret) });
+        const res = await got.get<Notification[]>(url, { responseType: 'json', headers: getHeader(url, this.secret) });
         const noteList = res.body;
         if (res.statusCode === 304) {
           debug('no change');
