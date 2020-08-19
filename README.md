@@ -19,7 +19,7 @@ const client = new ApolloClient<Config>({
   ],
 });
 
-client.changeEvent.on('key1', (notify) => {
+client.changeEvent.on('redis', (notify) => {
   console.log(notify);
 });
 ```
