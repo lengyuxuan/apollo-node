@@ -81,7 +81,6 @@ export class ApolloClient<T> {
     }
     this.listenChange();
   }
-
   /**
    * 监听namespace变动
    */
@@ -117,6 +116,7 @@ export class ApolloClient<T> {
     const url = `${this.host}/configs/${this.appId}/${this.cluster}`;
     const result = spawnSync('node', ['sync.js'], {
       env: {
+        ...process.env,
         URL_PREFIX: url,
         NAMESPACE: this.namespace.join(','),
         SECRET: this.secret,
