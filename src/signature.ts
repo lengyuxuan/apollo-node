@@ -1,11 +1,11 @@
 import * as crypto from 'crypto';
 import { parse as urlParse } from 'url';
 
-export function getHeader(url: string, secret?: string) {
+export function getHeader(appId: string, url: string, secret?: string) {
   const timestamp = Date.now().toString();
   return secret ? {
     Timestamp: timestamp,
-    Authorization: `Apollo mind-server:${ signature(urlParse(url).path, timestamp, secret) }`,
+    Authorization: `Apollo ${appId}:${ signature(urlParse(url).path, timestamp, secret) }`,
   } : {};
 }
 
