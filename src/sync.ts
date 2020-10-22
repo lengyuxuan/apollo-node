@@ -8,6 +8,7 @@ import { ConfigResult } from './typing';
 const urlPrefix = process.env.URL_PREFIX;
 const list = process.env.NAMESPACE.split(',');
 const secret = process.env.SECRET;
+const appid = process.env.APPID;
 
 (async () => {
   const config = {};
@@ -15,7 +16,7 @@ const secret = process.env.SECRET;
     const url = `${ urlPrefix }/${ name }`;
     const res = await got.get<ConfigResult<{[key: string]: string}>>(url, {
       responseType: 'json',
-      headers: getHeader(url, secret),
+      headers: getHeader(appid, url, secret),
     });
     if (name === 'application') {
       Object.assign(config, res.body.configurations);

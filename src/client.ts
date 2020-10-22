@@ -91,7 +91,7 @@ export class ApolloClient<T> {
     while (true) {
       try {
         const url = `${this.host}/notifications/v2?appId=${this.appId}&cluster=${this.cluster}&notifications=${encodeURI(JSON.stringify(notifications))}`
-        const res = await got.get<Notification[]>(url, { responseType: 'json', headers: getHeader(url, this.secret) });
+        const res = await got.get<Notification[]>(url, { responseType: 'json', headers: getHeader(this.appId, url, this.secret) });
         const noteList = res.body;
         if (res.statusCode === 304) {
           debug('no change');
@@ -120,6 +120,7 @@ export class ApolloClient<T> {
         URL_PREFIX: url,
         NAMESPACE: this.namespace.join(','),
         SECRET: this.secret,
+        APPID: this.appId,
       },
       cwd: __dirname,
     });
@@ -138,7 +139,7 @@ export class ApolloClient<T> {
   private async updateConfig(namespaceName: string) {
     try {
       const url = `${this.host}/configs/${this.appId}/${this.cluster}/${namespaceName}?releaseKey=${this.releaseKey}&ip=${this.ip}`;
-      const res = await got.get<ConfigResult<T>>(url, { responseType: 'json', headers: getHeader(url, this.secret) });
+      const res = await got.get<ConfigResult<T>>(url, { responseType: 'json', headers: getHeader(this.appId, url, this.secret) });
       if (res.statusCode === 304) {
         debug('releaseKey is same!');
         return;
