@@ -4,7 +4,7 @@ interface Config {
   key1: string;
   key2: number;
   key3: boolean,
-  mongoDb: {
+  mongodb: {
     url: string,
   },
   redis: {
@@ -36,7 +36,7 @@ const client = new ApolloClient<Config>({
       password: String,
     },
   },
-  sync: true,
+  sync: false,
 }, (config: Config) => {
   console.log(config);
 });
